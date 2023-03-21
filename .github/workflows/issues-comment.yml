@@ -1,0 +1,36 @@
+name: issue comment test
+on:
+  issues:
+    type:
+      - labeled
+
+jobs:
+  test-comment:
+    if: github.event.label.name == 'bug'
+    runs-on: ubuntu-matrix
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    steps:
+      - name: Output files
+        id: json_out
+        run: echo data.json
+      - name: Comment on Issue by github-scripts
+        uses: actions/github-scripts@v6.3.3
+        env:
+          DATA: "json\n${{ steps.json_out.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            \`\`\`
+            ${process.env.DATA}
+            \`\`\``;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
