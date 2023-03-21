@@ -15,7 +15,9 @@ jobs:
     steps:
       - name: Output files
         id: json_out
-        run: cat data.json
+        run: |
+          echo "[["date1","arn1","id1"],["date2","arn2","id2"]]"
+
       - name: Comment on Issue by github-script
         uses: actions/github-script@v6.3.3
         env:
