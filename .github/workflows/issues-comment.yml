@@ -16,8 +16,8 @@ jobs:
       - name: Output files
         id: json_out
         run: echo data.json
-      - name: Comment on Issue by github-scripts
-        uses: actions/github-scripts@v6.3.3
+      - name: Comment on Issue by github-script
+        uses: actions/github-script@v6.3.3
         env:
           DATA: "json\n${{ steps.json_out.outputs.stdout }}"
         with:
