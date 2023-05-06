@@ -16,7 +16,7 @@ jobs:
       - name: Output files
         id: json_out
         run: |
-          echo "[["date1","arn1","id1"],["date2","arn2","id2"]]"
+          echo "[[\"date1\",\"arn1\",\"id1\"],[\"date2\",\"arn2\",\"id2\"]]" > ./result
 
       - name: Comment on Issue by github-script
         uses: actions/github-script@v6.3.3
@@ -36,3 +36,10 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+
+      - name: Comment on Issue by gh
+        uses: actions/github-script@v6.3.3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.context.issue.number }} -F ./result -R ${{ github.repository }}
